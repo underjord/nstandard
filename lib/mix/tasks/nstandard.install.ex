@@ -76,7 +76,7 @@ if Code.ensure_loaded?(Igniter) do
       # Do your work here and return an updated igniter
       igniter
       |> Nstandard.Igniters.add_docs()
-      |> Nstandard.Igniters.add_packages()
+      |> Nstandard.Igniters.add_package()
       |> Nstandard.Igniters.add_linters()
       |> Nstandard.Igniters.add_credo_config()
       |> Nstandard.Igniters.add_license()

@@ -1,17 +1,25 @@
 defmodule Nstandard.Igniters do
-  @deps [:credo, :ex_doc, :dialyxir]
+  @deps [
+    {:ex_doc, "~> 0.31"},
+    {:dialyxir, "~> 1.0"},
+    {:credo, "~> 1.7"}
+  ]
 
   def add_docs(igniter) do
     app_name = Igniter.Project.Application.app_name(igniter)
 
     fancy_name =
       app_name
+      |> to_string()
       |> String.replace("_", " ")
       |> String.capitalize()
 
     igniter
     |> new_project_string([:name], fancy_name)
-    |> new_project_string([:description], "TODO: write a proper description")
+    |> new_project_string(
+      [:description],
+      "TODO: write a proper description"
+    )
     |> new_project_function(:docs, main: "readme", extras: ["README.md"])
   end
 
@@ -27,18 +35,21 @@ defmodule Nstandard.Igniters do
   end
 
   def add_linters(igniter) do
-    igniter
-    |> new_project_function(:aliases,
-      check: [
-        "compile --warnings-as-errors --force",
-        "format --check-formatted",
-        "credo",
-        "dialyzer"
-      ]
-    )
-    |> Igniter.install(:credo)
-    |> Igniter.install(:ex_doc)
-    |> Igniter.install(:dialyxir)
+    igniter =
+      igniter
+      |> new_project_function(:aliases,
+        check: [
+          "compile --warnings-as-errors --force",
+          "format --check-formatted",
+          "credo",
+          "dialyzer"
+        ]
+      )
+
+    @deps
+    |> Enum.reduce(igniter, fn dep, igniter ->
+      Igniter.Project.Deps.add_dep(igniter, dep, append?: true)
+    end)
   end
 
   def add_credo_config(igniter) do
@@ -110,7 +121,7 @@ defmodule Nstandard.Igniters do
 
     igniter
     |> Igniter.mkdir(".github")
-    |> Igniter.create_new_file(".github/ci.yml", dependabot, on_exists: :warning)
+    |> Igniter.create_new_file(".github/ci.yml", ci, on_exists: :warning)
   end
 
   defp new_project_function(igniter, function_name, kv_pairs) do
@@ -128,9 +139,10 @@ defmodule Nstandard.Igniters do
         end
       end)
 
-    keyword_list
+    kv_pairs
     |> Enum.reduce(igniter, fn {key, value}, igniter ->
-      Igniter.Project.MixProject.update(function_name, [key], fn zipper ->
+      igniter
+      |> Igniter.Project.MixProject.update(function_name, [key], fn zipper ->
         if zipper do
           {:ok, zipper}
         else
@@ -143,16 +155,10 @@ defmodule Nstandard.Igniters do
   defp new_project_string(igniter, path, value) do
     igniter
     |> Igniter.Project.MixProject.update(:project, path, fn zipper ->
-      cond do
-        Igniter.Code.String.string?(zipper) ->
-          # Do nothing
-          {:ok, zipper}
-
-        nil ->
-          {:ok, {:code, value}}
-
-        true ->
-          {:ok, zipper}
+      if zipper do
+        {:ok, zipper}
+      else
+        {:ok, {:code, {:__block__, [], [value]}}}
       end
     end)
   end

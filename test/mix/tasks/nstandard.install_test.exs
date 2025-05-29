@@ -2,7 +2,7 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
   use ExUnit.Case, async: true
   import Igniter.Test
 
-  test "it warns when run" do
+  test "project is set up according to the nerves standard practices" do
     # generate a test project
     test_project()
     # run our task
