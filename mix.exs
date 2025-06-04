@@ -44,7 +44,7 @@ defmodule Nstandard.MixProject do
 
   defp deps do
     [
-      {:igniter, "~> 0.6", optional: true, runtime: false},
+      {:igniter, "~> 0.6", optional: true},
       # Linters are all optional because we want to put them in the dependant project
       {:ex_doc, "~> 0.31", optional: true, runtime: false},
       {:dialyxir, "~> 1.0", optional: true, runtime: false},

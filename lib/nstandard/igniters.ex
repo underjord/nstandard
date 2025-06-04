@@ -1,4 +1,8 @@
 defmodule Nstandard.Igniters do
+  @moduledoc """
+  Igniters for adding the standard parts to a mix project.
+  """
+
   @deps [
     {:ex_doc, "~> 0.31"},
     {:dialyxir, "~> 1.0"},
@@ -99,7 +103,7 @@ defmodule Nstandard.Igniters do
     """
 
     igniter
-    |> Igniter.create_new_file("CHANGELOG.md", changelog, on_exisxts: :warning)
+    |> Igniter.create_new_file("CHANGELOG.md", changelog, on_exists: :warning)
   end
 
   def add_dependabot(igniter) do
@@ -125,29 +129,31 @@ defmodule Nstandard.Igniters do
   end
 
   defp new_project_function(igniter, function_name, kv_pairs) do
-    igniter =
-      igniter
-      |> Igniter.Project.MixProject.update(:project, [function_name], fn zipper ->
-        if zipper do
-          {:ok, zipper}
-        else
-          {:ok,
-           {:code,
-            quote do
-              unquote(function_name)()
-            end}}
-        end
-      end)
+    igniter
+    |> Igniter.Project.MixProject.update(:project, [function_name], fn zipper ->
+      if zipper do
+        {:ok, zipper}
+      else
+        {:ok,
+         {:code,
+          quote do
+            unquote(function_name)()
+          end}}
+      end
+    end)
+    |> add_kv_pairs(function_name, kv_pairs)
+  end
 
+  defp add_kv_pairs(igniter, function_name, kv_pairs) do
     kv_pairs
     |> Enum.reduce(igniter, fn {key, value}, igniter ->
       igniter
-      |> Igniter.Project.MixProject.update(function_name, [key], fn zipper ->
-        if zipper do
-          {:ok, zipper}
-        else
+      |> Igniter.Project.MixProject.update(function_name, [key], fn
+        nil ->
           {:ok, {:code, value}}
-        end
+
+        zipper ->
+          {:ok, zipper}
       end)
     end)
   end
