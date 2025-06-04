@@ -1,21 +1,27 @@
 # Nstandard
 
-**TODO: Add description**
+A library for easily setting up a library that follows good standard practices.
+
+Linting, CI (via GitHub Actions), preparing for publishing to Hex and a bunch
+of other busy-work that most would prefer not to do.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `nstandard` to your list of dependencies in `mix.exs`:
+In your library project:
 
-```elixir
-def deps do
-  [
-    {:nstandard, "~> 0.1.0"}
-  ]
-end
+```
+mix archive.install hex igniter_new
+mix igniter.install nstandard
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/nstandard>.
+It should prompt you about the changes it wants to make.
 
+## Usage
+
+Most of it is config. The CI should run automatically.
+
+You also get an alias for running the linters:
+
+```sh
+mix check
+```
