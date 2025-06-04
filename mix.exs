@@ -16,7 +16,11 @@ defmodule Nstandard.MixProject do
       source_url: "https://github.com/underjord/nstandard",
       docs: docs(),
       package: package(),
-      aliases: aliases()
+      aliases: aliases(),
+      dialyzer: [
+        plt_add_apps: [:mix],
+        ignore_warnings: ".dialyzer_ignore.exs"
+      ]
     ]
   end
 
