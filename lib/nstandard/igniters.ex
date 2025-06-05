@@ -150,7 +150,7 @@ defmodule Nstandard.Igniters do
       igniter
       |> Igniter.Project.MixProject.update(function_name, [key], fn
         nil ->
-          {:ok, {:code, value}}
+          {:ok, {:code, {:__block__, [], [value]}}}
 
         zipper ->
           {:ok, zipper}

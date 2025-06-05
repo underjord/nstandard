@@ -47,7 +47,7 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
     test_project()
     |> Igniter.compose_task("nstandard.install", [])
     |> assert_has_patch("mix.exs", "        13 + |      docs: docs(),")
-    |> assert_has_patch("mix.exs", "        28 + |      main: readme,")
+    |> assert_has_patch("mix.exs", "        28 + |      main: \"readme\",")
     |> assert_has_patch("mix.exs", "        29 + |      extras: [\"README.md\"]")
   end
 
