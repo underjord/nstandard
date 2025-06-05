@@ -13,25 +13,28 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
     # Verify dependencies are added to mix.exs
     |> assert_has_patch(
       "mix.exs",
-      " + |      {:ex_doc, \"~> 0.31\", only: [:dev, :test], runtime: false},"
-    )
-    |> assert_has_patch(
-      "mix.exs",
-      " + |      {:dialyxir, \"~> 1.0\", only: [:dev, :test], runtime: false},"
-    )
-    |> assert_has_patch(
-      "mix.exs",
-      " + |      {:credo, \"~> 1.7\", only: [:dev, :test], runtime: false}"
+      """
+       + |      {:ex_doc, \"~> 0.31\", only: [:dev, :test], runtime: false},
+       + |      {:dialyxir, \"~> 1.0\", only: [:dev, :test], runtime: false},
+       + |      {:credo, \"~> 1.7\", only: [:dev, :test], runtime: false},
+       + |      {:spellweaver, \"~> 0.1\", only: [:dev, :test], runtime: false}
+      """
     )
     # Verify aliases are added
-    |> assert_has_patch("mix.exs", " + |      check: [")
     |> assert_has_patch(
       "mix.exs",
-      " + |        \"compile --warnings-as-errors --force\","
+      """
+      + |      check: [
+      + |        \"hex.audit\",
+      + |        \"compile --warnings-as-errors --force\",
+      + |        \"format --check-formatted\",
+      + |        \"credo\",
+      + |        \"deps.unlock --check-unused\",
+      + |        \"spellweaver.check\",
+      + |        \"dialyzer\"
+      + |      ]
+      """
     )
-    |> assert_has_patch("mix.exs", " + |        \"format --check-formatted\",")
-    |> assert_has_patch("mix.exs", " + |        \"credo\",")
-    |> assert_has_patch("mix.exs", " + |        \"dialyzer\"")
     # Verify dialyzer configuration is added
     |> assert_has_patch("mix.exs", " + |      plt_add_apps: [:mix],")
     |> assert_has_patch("mix.exs", " + |      ignore_warnings: \".dialyzer_ignore.exs\"")

@@ -44,11 +44,11 @@ defmodule Nstandard.Igniters do
       igniter
       |> new_project_function(:aliases,
         check: [
+          "hex.audit",
           "compile --warnings-as-errors --force",
           "format --check-formatted",
           "credo",
           "deps.unlock --check-unused",
-          "hex.audit",
           "spellweaver.check",
           "dialyzer"
         ]
