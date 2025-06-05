@@ -10,9 +10,18 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
     |> assert_creates("LICENSE.md")
     |> assert_creates("CHANGELOG.md")
     # Verify dependencies are added to mix.exs
-    |> assert_has_patch("mix.exs", "        55 + |      {:ex_doc, \"~> 0.31\"},")
-    |> assert_has_patch("mix.exs", "        56 + |      {:dialyxir, \"~> 1.0\"},")
-    |> assert_has_patch("mix.exs", "        57 + |      {:credo, \"~> 1.7\"}")
+    |> assert_has_patch(
+      "mix.exs",
+      "        55 + |      {:ex_doc, \"~> 0.31\", only: [:dev, :test]},"
+    )
+    |> assert_has_patch(
+      "mix.exs",
+      "        56 + |      {:dialyxir, \"~> 1.0\", only: [:dev, :test]},"
+    )
+    |> assert_has_patch(
+      "mix.exs",
+      "        57 + |      {:credo, \"~> 1.7\", only: [:dev, :test]}"
+    )
     # Verify aliases are added
     |> assert_has_patch("mix.exs", "        43 + |      check: [")
     |> assert_has_patch(

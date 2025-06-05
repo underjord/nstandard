@@ -4,9 +4,9 @@ defmodule Nstandard.Igniters do
   """
 
   @deps [
-    {:ex_doc, "~> 0.31"},
-    {:dialyxir, "~> 1.0"},
-    {:credo, "~> 1.7"}
+    {:ex_doc, "~> 0.31", only: [:dev, :test]},
+    {:dialyxir, "~> 1.0", only: [:dev, :test]},
+    {:credo, "~> 1.7", only: [:dev, :test]}
   ]
 
   def add_docs(igniter) do
