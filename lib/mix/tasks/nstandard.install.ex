@@ -78,6 +78,7 @@ if Code.ensure_loaded?(Igniter) do
       |> Nstandard.Igniters.add_docs()
       |> Nstandard.Igniters.add_package()
       |> Nstandard.Igniters.add_linters()
+      |> Nstandard.Igniters.add_dialyzer_ignore()
       |> Nstandard.Igniters.add_credo_config()
       |> Nstandard.Igniters.add_license()
       |> Nstandard.Igniters.add_changelog()

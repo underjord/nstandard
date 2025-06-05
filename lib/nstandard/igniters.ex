@@ -49,6 +49,10 @@ defmodule Nstandard.Igniters do
           "dialyzer"
         ]
       )
+      |> new_project_function(:dialyzer,
+        plt_add_apps: [:mix],
+        ignore_warnings: ".dialyzer_ignore.exs"
+      )
 
     @deps
     |> Enum.reduce(igniter, fn dep, igniter ->
@@ -104,6 +108,16 @@ defmodule Nstandard.Igniters do
 
     igniter
     |> Igniter.create_new_file("CHANGELOG.md", changelog, on_exists: :warning)
+  end
+
+  def add_dialyzer_ignore(igniter) do
+    dialyzer_ignore =
+      :code.priv_dir(:nstandard)
+      |> Path.join(".dialyzer_ignore.exs")
+      |> File.read!()
+
+    igniter
+    |> Igniter.create_new_file(".dialyzer_ignore.exs", dialyzer_ignore, on_exists: :warning)
   end
 
   def add_dependabot(igniter) do
