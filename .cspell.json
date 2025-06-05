@@ -1,0 +1,37 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+  "useGitignore": true,
+  "ignorePaths": [
+    "**/*.csv",
+    "**/*.eex",
+    "**/*.yml",
+    "deps",
+    "_build",
+    "assets",
+    "mix.exs",
+    "priv",
+    "test"
+  ],
+  "words": [
+    "dialyxir",
+    "ecto",
+    "esbuild",
+    "heroicons",
+    "hexpm",
+    "ilike",
+    "inotify",
+    "liveview",
+    "noopener",
+    "noreferrer",
+    "novalidate",
+    "nowrap",
+    "nstandard",
+    "oban",
+    "postgrex",
+    "rebar",
+    "spellweaver",
+    "tzdata"
+  ]
+}

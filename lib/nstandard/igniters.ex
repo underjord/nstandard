@@ -6,7 +6,8 @@ defmodule Nstandard.Igniters do
   @deps [
     {:ex_doc, "~> 0.31", only: [:dev, :test], runtime: false},
     {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
-    {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+    {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+    {:spellweaver, "~> 0.1", only: [:dev, :test], runtime: false}
   ]
 
   def add_docs(igniter) do
@@ -46,6 +47,9 @@ defmodule Nstandard.Igniters do
           "compile --warnings-as-errors --force",
           "format --check-formatted",
           "credo",
+          "deps.unlock --check-unused",
+          "hex.audit",
+          "spellweaver.check",
           "dialyzer"
         ]
       )
