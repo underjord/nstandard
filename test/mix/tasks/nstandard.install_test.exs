@@ -12,15 +12,15 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
     # Verify dependencies are added to mix.exs
     |> assert_has_patch(
       "mix.exs",
-      "        55 + |      {:ex_doc, \"~> 0.31\", only: [:dev, :test]},"
+      "        55 + |      {:ex_doc, \"~> 0.31\", only: [:dev, :test], runtime: false},"
     )
     |> assert_has_patch(
       "mix.exs",
-      "        56 + |      {:dialyxir, \"~> 1.0\", only: [:dev, :test]},"
+      "        56 + |      {:dialyxir, \"~> 1.0\", only: [:dev, :test], runtime: false},"
     )
     |> assert_has_patch(
       "mix.exs",
-      "        57 + |      {:credo, \"~> 1.7\", only: [:dev, :test]}"
+      "        57 + |      {:credo, \"~> 1.7\", only: [:dev, :test], runtime: false}"
     )
     # Verify aliases are added
     |> assert_has_patch("mix.exs", "        43 + |      check: [")
