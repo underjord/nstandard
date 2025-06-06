@@ -63,7 +63,8 @@ defmodule Nstandard.MixProject do
         "compile --warnings-as-errors --force",
         "format --check-formatted",
         "credo",
-        "dialyzer"
+        "dialyzer",
+        "spellweaver.check"
       ]
     ]
   end
