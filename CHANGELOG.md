@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+
+- Improve how Igniter installer handles aliases.
+- Make library compatible with precommit convention from phoenix.
+
 ## 0.2.0
 
 - Update all linters to recent version.
