@@ -24,6 +24,12 @@ defmodule Nstandard.MixProject do
     ]
   end
 
+  def cli do
+    [
+      preferred_envs: [precommit: :test]
+    ]
+  end
+
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
@@ -65,6 +71,14 @@ defmodule Nstandard.MixProject do
         "credo",
         "dialyzer",
         "spellweaver.check"
+      ],
+      precommit: [
+        "compile --warnings-as-errors --force",
+        "format",
+        "credo",
+        "dialyzer",
+        "spellweaver.check",
+        "test"
       ]
     ]
   end

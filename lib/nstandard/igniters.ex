@@ -51,7 +51,22 @@ defmodule Nstandard.Igniters do
           "deps.unlock --check-unused",
           "spellweaver.check",
           "dialyzer"
+        ],
+        precommit: [
+          "hex.audit",
+          "compile --warnings-as-errors --force",
+          "format",
+          "credo",
+          "deps.unlock --unused",
+          "spellweaver.check",
+          "dialyzer",
+          "test"
         ]
+      )
+      |> Igniter.Project.MixProject.update(
+        :cli,
+        [:preferred_envs, :precommit],
+        fn _ -> {:ok, {:code, :test}} end
       )
       |> new_project_function(:dialyzer,
         plt_add_apps: [:mix],
@@ -212,17 +227,39 @@ defmodule Nstandard.Igniters do
   end
 
   defp add_kv_pairs(igniter, function_name, kv_pairs) do
+    # Check if the function exists as defp in mix.exs (e.g., Phoenix projects).
+    # If so, route through :project which resolves both def and defp.
+    # Otherwise, use the direct function path which creates the function if needed.
+    use_project_path = has_defp_in_mix?(igniter, function_name)
+
     kv_pairs
     |> Enum.reduce(igniter, fn {key, value}, igniter ->
-      igniter
-      |> Igniter.Project.MixProject.update(function_name, [key], fn
+      updater = fn
         nil ->
           {:ok, {:code, {:__block__, [], [value]}}}
 
         zipper ->
           {:ok, zipper}
-      end)
+      end
+
+      if use_project_path do
+        Igniter.Project.MixProject.update(igniter, :project, [function_name, key], updater)
+      else
+        Igniter.Project.MixProject.update(igniter, function_name, [key], updater)
+      end
     end)
+  end
+
+  defp has_defp_in_mix?(igniter, function_name) do
+    case Rewrite.source(igniter.rewrite, "mix.exs") do
+      {:ok, source} ->
+        source
+        |> Rewrite.Source.get(:content)
+        |> String.contains?("defp #{function_name}")
+
+      _ ->
+        false
+    end
   end
 
   defp new_project_string(igniter, path, value) do

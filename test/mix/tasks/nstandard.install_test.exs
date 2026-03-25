@@ -21,7 +21,7 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
        + |      {:spellweaver, \"~> 0.1\", only: [:dev, :test], runtime: false}
       """
     )
-    # Verify aliases are added
+    # Verify check alias is added
     |> assert_has_patch(
       "mix.exs",
       """
@@ -36,6 +36,24 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
       + |      ]
       """
     )
+    # Verify precommit alias is added
+    |> assert_has_patch(
+      "mix.exs",
+      """
+      + |      precommit: [
+      + |        \"hex.audit\",
+      + |        \"compile --warnings-as-errors --force\",
+      + |        \"format\",
+      + |        \"credo\",
+      + |        \"deps.unlock --unused\",
+      + |        \"spellweaver.check\",
+      + |        \"dialyzer\",
+      + |        \"test\"
+      + |      ]
+      """
+    )
+    # Verify cli function is added with preferred_envs
+    |> assert_has_patch("mix.exs", " + |      preferred_envs: [precommit: :test]")
     # Verify dialyzer configuration is added
     |> assert_has_patch("mix.exs", " + |      plt_add_apps: [:mix],")
     |> assert_has_patch("mix.exs", " + |      ignore_warnings: \".dialyzer_ignore.exs\"")
@@ -88,6 +106,60 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
     |> assert_has_patch("mix.exs", " + |      docs: docs(),")
     |> assert_has_patch("mix.exs", " + |      main: \"readme\",")
     |> assert_has_patch("mix.exs", " + |      extras: [\"README.md\"]")
+  end
+
+  test "works with existing aliases function (Phoenix-style project)" do
+    phx_mix_exs = """
+    defmodule Test.MixProject do
+      use Mix.Project
+
+      def project do
+        [
+          app: :test,
+          version: "0.1.0",
+          elixir: "~> 1.17",
+          start_permanent: Mix.env() == :prod,
+          aliases: aliases(),
+          deps: deps()
+        ]
+      end
+
+      def cli do
+        [
+          preferred_envs: [precommit: :test]
+        ]
+      end
+
+      def application do
+        [
+          extra_applications: [:logger]
+        ]
+      end
+
+      defp aliases do
+        [
+          setup: ["deps.get", "ecto.setup"],
+          precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
+        ]
+      end
+
+      defp deps do
+        [
+          # {:dep_from_hexpm, "~> 0.3.0"},
+        ]
+      end
+    end
+    """
+
+    diff =
+      test_project(files: %{"mix.exs" => phx_mix_exs})
+      |> Igniter.compose_task("nstandard.install", [])
+      |> Igniter.Test.diff(only: "mix.exs")
+
+    # Should add check alias into the existing defp aliases function
+    assert diff =~ "check: ["
+    # Should NOT create a duplicate def aliases function
+    refute diff =~ "+ |  def aliases do"
   end
 
   test "creates changelog with initial structure" do
