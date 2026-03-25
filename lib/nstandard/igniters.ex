@@ -4,8 +4,8 @@ defmodule Nstandard.Igniters do
   """
 
   @deps [
-    {:ex_doc, "~> 0.31", only: [:dev, :test], runtime: false},
-    {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+    {:ex_doc, "~> 0.40", only: [:dev, :test], runtime: false},
+    {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
     {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
     {:spellweaver, "~> 0.1", only: [:dev, :test], runtime: false}
   ]
@@ -122,6 +122,55 @@ defmodule Nstandard.Igniters do
 
     igniter
     |> Igniter.create_new_file(".dialyzer_ignore.exs", dialyzer_ignore, on_exists: :warning)
+  end
+
+  def add_bun_config(igniter) do
+    if Igniter.exists?(igniter, "config/config.exs") do
+      Igniter.Project.Config.configure_new(
+        igniter,
+        "config/config.exs",
+        :bun,
+        [:version],
+        "1.2.2"
+      )
+    else
+      igniter
+    end
+  end
+
+  def add_cspell_config(igniter) do
+    contents = """
+    {
+      "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+      "version": "0.2",
+      "language": "en",
+      "useGitignore": true,
+      "dictionaryDefinitions": [
+        {
+          "name": "fhunleth-cspell-dictionary",
+          "path": "https://raw.githubusercontent.com/fhunleth/fhunleth-cspell-dictionary/refs/heads/main/words.txt",
+          "addWords": false
+        }
+      ],
+      "dictionaries": [
+        "elixir",
+        "en-gb",
+        "fhunleth-cspell-dictionary"
+      ],
+      "ignorePaths": [
+        "deps",
+        "_build",
+        "assets",
+        "mix.exs",
+        "priv",
+        "test"
+      ],
+      "words": []
+    }
+    """
+
+    igniter
+    |> Igniter.create_new_file(".cspell.json", contents, on_exists: :warning)
   end
 
   def add_dependabot(igniter) do

@@ -3,6 +3,18 @@
   "version": "0.2",
   "language": "en",
   "useGitignore": true,
+  "dictionaryDefinitions": [
+    {
+      "name": "fhunleth-cspell-dictionary",
+      "path": "https://raw.githubusercontent.com/fhunleth/fhunleth-cspell-dictionary/refs/heads/main/words.txt",
+      "addWords": false
+    }
+  ],
+  "dictionaries": [
+    "elixir",
+    "en-gb",
+    "fhunleth-cspell-dictionary"
+  ],
   "ignorePaths": [
     "**/*.csv",
     "**/*.eex",
@@ -16,22 +28,7 @@
   ],
   "words": [
     "dialyxir",
-    "ecto",
-    "esbuild",
-    "heroicons",
-    "hexpm",
-    "ilike",
-    "inotify",
-    "liveview",
-    "noopener",
-    "noreferrer",
-    "novalidate",
-    "nowrap",
     "nstandard",
-    "oban",
-    "postgrex",
-    "rebar",
-    "spellweaver",
-    "tzdata"
+    "spellweaver"
   ]
 }

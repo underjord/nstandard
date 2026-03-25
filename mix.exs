@@ -49,10 +49,10 @@ defmodule Nstandard.MixProject do
   defp deps do
     [
       {:spellweaver, "~> 0.1", optional: true},
-      {:igniter, "~> 0.6", optional: true},
+      {:igniter, "~> 0.7", optional: true},
       # Linters are all optional because we want to put them in the dependant project
-      {:ex_doc, "~> 0.31", optional: true, runtime: false},
-      {:dialyxir, "~> 1.0", optional: true, runtime: false},
+      {:ex_doc, "~> 0.40", optional: true, runtime: false},
+      {:dialyxir, "~> 1.4", optional: true, runtime: false},
       {:credo, "~> 1.7", optional: true, runtime: false}
     ]
   end

@@ -7,6 +7,7 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
     |> Igniter.compose_task("nstandard.install", [])
     # Verify files are created
     |> assert_creates(".credo.exs")
+    |> assert_creates(".cspell.json")
     |> assert_creates(".dialyzer_ignore.exs")
     |> assert_creates("LICENSE.md")
     |> assert_creates("CHANGELOG.md")
@@ -14,8 +15,8 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
     |> assert_has_patch(
       "mix.exs",
       """
-       + |      {:ex_doc, \"~> 0.31\", only: [:dev, :test], runtime: false},
-       + |      {:dialyxir, \"~> 1.0\", only: [:dev, :test], runtime: false},
+       + |      {:ex_doc, \"~> 0.40\", only: [:dev, :test], runtime: false},
+       + |      {:dialyxir, \"~> 1.4\", only: [:dev, :test], runtime: false},
        + |      {:credo, \"~> 1.7\", only: [:dev, :test], runtime: false},
        + |      {:spellweaver, \"~> 0.1\", only: [:dev, :test], runtime: false}
       """
