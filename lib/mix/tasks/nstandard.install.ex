@@ -55,6 +55,8 @@ if Code.ensure_loaded?(Igniter) do
         example: __MODULE__.Docs.example(),
         # A list of environments that this should be installed in.
         only: nil,
+        # Dependency options applied to this installer's entry in `mix.exs`
+        dep_opts: [runtime: false],
         # a list of positional arguments, i.e `[:file]`
         positional: [],
         # Other tasks your task composes using `Igniter.compose_task`, passing in the CLI argv
