@@ -13,7 +13,7 @@ defmodule Nstandard.Igniters do
     {:ex_doc, "~> 0.40", only: [:dev, :test], runtime: false},
     {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
     {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-    {:spellweaver, "~> 0.1", only: [:dev, :test], runtime: false}
+    {:spellweaver, "~> 0.1.8", only: [:dev, :test], runtime: false}
   ]
 
   def add_docs(igniter) do

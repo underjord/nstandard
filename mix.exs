@@ -4,7 +4,7 @@ defmodule Nstandard.MixProject do
   def project do
     [
       app: :nstandard,
-      version: "0.4.0",
+      version: "0.5.0",
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :dev,
@@ -54,7 +54,7 @@ defmodule Nstandard.MixProject do
 
   defp deps do
     [
-      {:spellweaver, "~> 0.1", optional: true},
+      {:spellweaver, "~> 0.1.8", optional: true},
       {:igniter, "~> 0.7", optional: true},
       # Linters are all optional because we want to put them in the dependant project
       {:ex_doc, "~> 0.40", optional: true, runtime: false},
