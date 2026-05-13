@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0
+
+- Refresh deps (spellweaver, credo, dialyxir, ex_doc, igniter).
+- Pass `--strict` to credo in default aliases so the strict mode (already set
+  in the generated `.credo.exs`) is obvious at the call site.
+- Fill out the CI template to match `mix check`: `hex.audit`, `credo --strict`,
+  `spellweaver.check`, and `dialyzer` now run on the lint matrix row, and the
+  build cache covers `_build` so the dialyzer PLT survives between runs.
+
 ## 0.3.0
 
 - Improve how Igniter installer handles aliases.
