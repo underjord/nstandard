@@ -68,14 +68,14 @@ defmodule Nstandard.MixProject do
       check: [
         "compile --warnings-as-errors --force",
         "format --check-formatted",
-        "credo",
+        "credo --strict",
         "dialyzer",
         "spellweaver.check"
       ],
       precommit: [
         "compile --warnings-as-errors --force",
         "format",
-        "credo",
+        "credo --strict",
         "dialyzer",
         "spellweaver.check",
         "test"

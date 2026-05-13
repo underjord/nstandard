@@ -31,11 +31,16 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          path: deps
+          path: |
+            deps
+            _build
           # cache per OTP
-          key: mix-otp-${{ matrix.pair.otp }}-deps-${{ hashFiles('**/mix.lock') }}
+          key: mix-otp-${{ matrix.pair.otp }}-build-${{ hashFiles('**/mix.lock') }}
 
       - run: mix deps.get --check-locked
+
+      - run: mix hex.audit
+        if: ${{ matrix.lint }}
 
       - run: mix format --check-formatted
         if: ${{ matrix.lint }}
@@ -48,8 +53,17 @@ jobs:
       - run: mix compile --no-optional-deps --warnings-as-errors
         if: ${{ matrix.lint }}
 
+      - run: mix credo --strict
+        if: ${{ matrix.lint }}
+
+      - run: mix spellweaver.check
+        if: ${{ matrix.lint }}
+
       - run: mix test --slowest 5
         if: ${{ ! matrix.lint }}
 
       - run: mix test --slowest 5 --warnings-as-errors
+        if: ${{ matrix.lint }}
+
+      - run: mix dialyzer
         if: ${{ matrix.lint }}

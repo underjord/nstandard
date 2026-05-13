@@ -29,7 +29,7 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
       + |        \"hex.audit\",
       + |        \"compile --warnings-as-errors --force\",
       + |        \"format --check-formatted\",
-      + |        \"credo\",
+      + |        \"credo --strict\",
       + |        \"deps.unlock --check-unused\",
       + |        \"spellweaver.check\",
       + |        \"dialyzer\"
@@ -44,7 +44,7 @@ defmodule Mix.Tasks.Nstandard.InstallTest do
       + |        \"hex.audit\",
       + |        \"compile --warnings-as-errors --force\",
       + |        \"format\",
-      + |        \"credo\",
+      + |        \"credo --strict\",
       + |        \"deps.unlock --unused\",
       + |        \"spellweaver.check\",
       + |        \"dialyzer\",

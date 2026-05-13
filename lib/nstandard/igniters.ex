@@ -3,6 +3,12 @@ defmodule Nstandard.Igniters do
   Igniters for adding the standard parts to a mix project.
   """
 
+  alias Igniter.Project.Application, as: ProjectApplication
+  alias Igniter.Project.Config, as: ProjectConfig
+  alias Igniter.Project.Deps, as: ProjectDeps
+  alias Igniter.Project.MixProject
+  alias Rewrite.Source
+
   @deps [
     {:ex_doc, "~> 0.40", only: [:dev, :test], runtime: false},
     {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
@@ -11,7 +17,7 @@ defmodule Nstandard.Igniters do
   ]
 
   def add_docs(igniter) do
-    app_name = Igniter.Project.Application.app_name(igniter)
+    app_name = ProjectApplication.app_name(igniter)
 
     fancy_name =
       app_name
@@ -29,7 +35,7 @@ defmodule Nstandard.Igniters do
   end
 
   def add_package(igniter) do
-    app_name = Igniter.Project.Application.app_name(igniter)
+    app_name = ProjectApplication.app_name(igniter)
 
     igniter
     |> new_project_function(:package,
@@ -47,7 +53,7 @@ defmodule Nstandard.Igniters do
           "hex.audit",
           "compile --warnings-as-errors --force",
           "format --check-formatted",
-          "credo",
+          "credo --strict",
           "deps.unlock --check-unused",
           "spellweaver.check",
           "dialyzer"
@@ -56,14 +62,14 @@ defmodule Nstandard.Igniters do
           "hex.audit",
           "compile --warnings-as-errors --force",
           "format",
-          "credo",
+          "credo --strict",
           "deps.unlock --unused",
           "spellweaver.check",
           "dialyzer",
           "test"
         ]
       )
-      |> Igniter.Project.MixProject.update(
+      |> MixProject.update(
         :cli,
         [:preferred_envs, :precommit],
         fn _ -> {:ok, {:code, :test}} end
@@ -75,7 +81,7 @@ defmodule Nstandard.Igniters do
 
     @deps
     |> Enum.reduce(igniter, fn dep, igniter ->
-      Igniter.Project.Deps.add_dep(igniter, dep, append?: true)
+      ProjectDeps.add_dep(igniter, dep, append?: true)
     end)
   end
 
@@ -141,7 +147,7 @@ defmodule Nstandard.Igniters do
 
   def add_bun_config(igniter) do
     if Igniter.exists?(igniter, "config/config.exs") do
-      Igniter.Project.Config.configure_new(
+      ProjectConfig.configure_new(
         igniter,
         "config/config.exs",
         :bun,
@@ -212,7 +218,7 @@ defmodule Nstandard.Igniters do
 
   defp new_project_function(igniter, function_name, kv_pairs) do
     igniter
-    |> Igniter.Project.MixProject.update(:project, [function_name], fn zipper ->
+    |> MixProject.update(:project, [function_name], fn zipper ->
       if zipper do
         {:ok, zipper}
       else
@@ -243,9 +249,9 @@ defmodule Nstandard.Igniters do
       end
 
       if use_project_path do
-        Igniter.Project.MixProject.update(igniter, :project, [function_name, key], updater)
+        MixProject.update(igniter, :project, [function_name, key], updater)
       else
-        Igniter.Project.MixProject.update(igniter, function_name, [key], updater)
+        MixProject.update(igniter, function_name, [key], updater)
       end
     end)
   end
@@ -254,7 +260,7 @@ defmodule Nstandard.Igniters do
     case Rewrite.source(igniter.rewrite, "mix.exs") do
       {:ok, source} ->
         source
-        |> Rewrite.Source.get(:content)
+        |> Source.get(:content)
         |> String.contains?("defp #{function_name}")
 
       _ ->
@@ -264,7 +270,7 @@ defmodule Nstandard.Igniters do
 
   defp new_project_string(igniter, path, value) do
     igniter
-    |> Igniter.Project.MixProject.update(:project, path, fn zipper ->
+    |> MixProject.update(:project, path, fn zipper ->
       if zipper do
         {:ok, zipper}
       else
